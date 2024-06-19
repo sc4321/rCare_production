@@ -89,6 +89,14 @@ def check_for_update():
         # restore the last valid copy if worse comes to worse
         string_cmd = "cp -rf " + BACKUP_FOLDER + " " + "."
         os.system(string_cmd)
+
+        # Update version file with latest version
+        with open(START_COPY_VERSION_FILE_NAME, "w") as f:
+            f.write(0.0)
+        # Update version file with latest version
+        with open(END_COPY_VERSION_FILE_NAME, "w") as f:
+            f.write(0.0)
+
         exit(0)
 
     max_retries = RETRIES_FOR_INTERNET_FAILURE  # Set the maximum number of retries for request.get
