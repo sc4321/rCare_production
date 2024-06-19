@@ -8,8 +8,8 @@ import stat  # Import the stat module
 import platform
 
 # GitHub repository URL
-repo_url = "https://api.github.com/repos/sc4321/rCare"
-repo_cloning_url = "https://github.com/sc4321/rCare.git"
+repo_url = "https://api.github.com/repos/sc4321/rCare_production"
+repo_cloning_url = "https://github.com/sc4321/rCare_production.git"
 
 # Last update file path
 LAST_UPDATE_FILE = "last_updated_time.txt"
@@ -113,7 +113,7 @@ def copy_files(source_path):
     shutil.copy2(os.path.join(source_path, "send_data_to_app_via_firebase.py"), ".")
     shutil.copy2(os.path.join(source_path, "config.txt"), ".")
     shutil.copy2(os.path.join(source_path, "consts.py"), ".")
-    shutil.copy2(os.path.join(source_path, "yolov8l.pt"), ".")
+    #shutil.copy2(os.path.join(source_path, "yolov8l.pt"), ".")
     shutil.copy2(os.path.join(source_path, "updater.py"), ".")
 
 
