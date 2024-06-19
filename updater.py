@@ -66,18 +66,23 @@ def check_for_update():
     if datetime.now() - last_update_time < timedelta(seconds=UPDATE_INTERVAL):
         print("Last update was within the last day. Skipping update check.")
         return
+    try:
+        with open(START_COPY_VERSION_FILE_NAME, "r") as f_start:
+            try:
+                current_version_start = float(f_start.readline().strip())
+            except:
+                current_version_start = 0.0
+    except FileNotFoundError:
+        current_version_start = 0.0
 
-    with open(START_COPY_VERSION_FILE_NAME, "r") as f_start:
-        try:
-            current_version_start = float(f_start.readline().strip())
-        except:
-            current_version_start = 0.0
-
-    with open(END_COPY_VERSION_FILE_NAME, "r") as f_end:
-        try:
-            current_version_end = float(f_end.readline().strip())
-        except:
-            current_version_end = 0.0
+    try:
+        with open(END_COPY_VERSION_FILE_NAME, "r") as f_end:
+            try:
+              current_version_end = float(f_end.readline().strip())
+            except:
+                current_version_end = 0.0
+    except FileNotFoundError:
+        current_version_end = 0.0
 
     # todo check if below is working @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     if current_version_end != current_version_start:
@@ -113,9 +118,8 @@ def copy_files(source_path):
     shutil.copy2(os.path.join(source_path, "send_data_to_app_via_firebase.py"), ".")
     shutil.copy2(os.path.join(source_path, "config.txt"), ".")
     shutil.copy2(os.path.join(source_path, "consts.py"), ".")
-    #shutil.copy2(os.path.join(source_path, "yolov8l.pt"), ".")
-    shutil.copy2(os.path.join(source_path, "updater.py"), ".")
-
+    # shutil.copy2(os.path.join(source_path, "yolov8l.pt"), ".")
+    #shutil.copy2(os.path.join(source_path, "updater.py"), ".") # todo
 
 
 def update_script(latest_version):
@@ -125,27 +129,23 @@ def update_script(latest_version):
             delete_folder_safely(TMP_FOLDER)
             err = subprocess.run(["git", "clone", "--depth=1", repo_cloning_url, TMP_FOLDER], check=True).stderr
 
-            # Update version file with latest version
-            with open(START_COPY_VERSION_FILE_NAME, "w") as f:
-                f.write(latest_version)
-
             # save a copy if worse comes to worse
 
-            # todo validate @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             string_cmd = "cp -rf " + ". " + BACKUP_FOLDER
 
             print("save a copy if worse comes to worse = ", string_cmd)
 
-            # todo - generate start version --only-- after creating the backup folder,
-            #  else start version would get a new version, a backupfolder might not create due to crush,
-            #  than the program would run again, would do a check of start and end version,
-            #  then it would would find its not equal => would try to load data from backup,
-            #  back currently there is no backup - so boom crush.
-            # with try catch, that only if the try to create backup folder succeeded,
-            # than and only than the start version is created
-
             # todo rethink add thread
-            os.system(string_cmd)
+            try:
+                os.system(string_cmd)
+            except:
+                print("error in saving a backup copy of previous version")
+                sleep(3)
+                exit(-1)
+
+            # Update version file with latest version
+            with open(START_COPY_VERSION_FILE_NAME, "w") as f:
+                f.write(latest_version)
 
             if err is None:
                 # Replace existing files with updated versions
