@@ -1,3 +1,4 @@
+#file_start_sanity_check
 import time
 import requests
 import subprocess  # For secure updates using Git
@@ -32,7 +33,6 @@ RETRIES_FOR_CLONING_FAILURE = 5
 # def PC_restart():
 #    os.system("shutdown /r /t 0")
 
-
 def get_last_update_time():
     if not os.path.exists(LAST_UPDATE_FILE):
         # Create the last update file (without writing anything initially)
@@ -62,8 +62,8 @@ def check_for_update():
     current_version_end = 0.0
 
     # Check if the last update was more than a day ago
-    # if datetime.now() - last_update_time < timedelta(days=UPDATE_INTERVAL): # todo change @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    if datetime.now() - last_update_time < timedelta(seconds=UPDATE_INTERVAL):
+    if datetime.now() - last_update_time < timedelta(days=UPDATE_INTERVAL):
+    #if datetime.now() - last_update_time < timedelta(seconds=UPDATE_INTERVAL):
         print("Last update was within the last day. Skipping update check.")
         return
     try:
@@ -222,3 +222,5 @@ def change_permissions_recursive_windows(path):
 
 if __name__ == "__main__":
     check_for_update()
+    print("Updater Done")
+#file_end_sanity_check
