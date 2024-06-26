@@ -1,3 +1,4 @@
+#file_start_sanity_check
 # pyinstaller --onefile --paths="C:\Python\Python3.8.8\Lib\site-packages\cv2" main.py
 import os
 import cv2
@@ -627,3 +628,4 @@ def is_image_lit(image, grid_size, brightness_threshold):
 
 if __name__ == "__main__":
     main()
+#file_end_sanity_check

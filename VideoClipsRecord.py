@@ -1,3 +1,4 @@
+#file_start_sanity_check
 from datetime import datetime
 import time
 import glob
@@ -147,5 +148,4 @@ class videoClipsHandler:
             pass
 
         self.V_Clip_images_counter += 1
-
-
+#file_end_sanity_check

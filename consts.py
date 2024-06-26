@@ -1,4 +1,5 @@
-import cv2
+#file_start_sanity_check
+#import cv2
 
 C_font = cv2.FONT_HERSHEY_SIMPLEX
 C_bottomLeftCornerOfText = (20, 460)
@@ -9,3 +10,4 @@ C_fontColor_black = (0, 0, 0)
 C_thickness_8 = 8
 C_thickness_4 = 4
 C_lineType = 2
+#file_end_sanity_check

@@ -1,3 +1,4 @@
+#file_start_sanity_check
 # in case of problem importing from google.cloud
 # try :  pip install --upgrade google-cloud-storage
 
@@ -257,7 +258,7 @@ class FirebaseDB:
                     consts.C_fontColor_black,
                     consts.C_thickness_8,
                     consts.C_lineType)
-        '''
+
         if person_count>0:
             cv2.putText(opencv_image, datetime,
                         consts.C_bottomLeftCornerOfText_small,
@@ -266,7 +267,7 @@ class FirebaseDB:
                         consts.C_fontColor,
                         1, #consts.C_thickness_4/4,
                         consts.C_lineType)
-
+        '''
 
         if self.InitializeOnce_updated == False:
             self.db = self.pyrebase.database()
@@ -435,3 +436,4 @@ if __name__ == "__main__":
 
     # Get data from database
     # result = firebase_db.get_data("example/path")
+#file_end_sanity_check
