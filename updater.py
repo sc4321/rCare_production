@@ -13,25 +13,57 @@ repo_url = "https://api.github.com/repos/sc4321/rCare_production"
 repo_cloning_url = "https://github.com/sc4321/rCare_production.git"
 
 # Last update file path
-LAST_UPDATE_FILE = "last_updated_time.txt"
+LAST_UPDATE_FILE = "./last_updated_time.txt"
 CLONED_FOLDER_PATH = "./updated_project"
 TMP_FOLDER = r"c:/tmp/rCare/"
 BACKUP_FOLDER = "../production_back"
-START_COPY_VERSION_FILE_NAME = "version_start_copy.txt"
-END_COPY_VERSION_FILE_NAME = "version_end_copy.txt"
+START_COPY_VERSION_FILE_NAME = "./version_start_copy.txt"
+END_COPY_VERSION_FILE_NAME = "./version_end_copy.txt"
 
 # Update check interval (in days)
 UPDATE_INTERVAL = 1
 
 # Magic numbers:
 REQUEST_HAS_SUCCEEDED = 200
-RETRIES_FOR_INTERNET_FAILURE = 5
-RETRIES_FOR_CLONING_FAILURE = 5
+RETRIES_FOR_INTERNET_FAILURE = 10
+RETRIES_FOR_CLONING_FAILURE = 10
+
+FILE_NAMES_TO_CHECK = {"./updater.py", "./main.py","./config.txt","./run.bat","./VideoClipsRecord.py","./VideoClipsRecord.py","./consts.py"}
+
+def check_all_files_are_valid(file_list):
+
+    for file_name in file_list:
+        try:
+            file = open(file_name, 'r')
+            lines = file.readlines()
+            ext = file_name.split(".")[-1]
+
+            if ext == "py" or ext == "txt":
+                check_start = lines[0].strip()
+                check_end = lines[-1].strip()
+
+                if lines[0].strip() == "#file_start_sanity_check" and lines[-1].strip() == "#file_end_sanity_check":
+                    print(file_name, " is OK")
+                    file.close()
+                else:
+                    print(file_name, " is NOT OK")
+                    file.close()
+                    return False    # problem occurred
+
+            if ext == "bat":
+                if lines[0].strip() == "REM file_start_sanity_check" and lines[-1].strip() == "REM file_end_sanity_check":
+                    print(file_name, " is OK")
+                    file.close()
+                else:
+                    print(file_name, " is NOT OK")
+                    file.close()
+                    return False  # problem occured
+        except:
+            return False  # problem occurred find or open a file
+
+    return True # all files exist and read OK
 
 
-# PC restart
-# def PC_restart():
-#    os.system("shutdown /r /t 0")
 
 def get_last_update_time():
     if not os.path.exists(LAST_UPDATE_FILE):
@@ -54,9 +86,12 @@ def get_last_update_time():
 
 
 def check_for_update():
-    last_update_time = get_last_update_time()
+
+    last_update_time = get_last_update_time()   # if first time, a new file with current time will be created.
+                                                # No Update at first time
     if last_update_time is None:
-        return  # Handle error getting last update time
+        print("last update date file not found")
+        return
 
     current_version_start = 0.0
     current_version_end = 0.0
@@ -97,8 +132,7 @@ def check_for_update():
         with open(END_COPY_VERSION_FILE_NAME, "w") as f:
             f.write("0.0")
 
-        exit(0)
-
+    check_res = True
     max_retries = RETRIES_FOR_INTERNET_FAILURE  # Set the maximum number of retries for request.get
     for attempt in range(1, max_retries + 1):
         try:
@@ -111,12 +145,15 @@ def check_for_update():
                     update_script(latest_version_tag_name)
                 else:
                     print(f"Already on latest version: {current_version_start}")
+                    exit(0)
                 break  # Exit loop on successful request
         except requests.exceptions.RequestException as e:
             print(f"Attempt {attempt}/{max_retries}: Error fetching update info: {e}")
             time.sleep(2 ** attempt)  # Exponential backoff between retries
+
     else:
         print("Failed to retrieve update information after retries.")
+        sys.exit(-3)
 
 
 def copy_files(source_path):
@@ -132,20 +169,22 @@ def copy_files(source_path):
 
 def update_script(latest_version):
     max_retries = RETRIES_FOR_CLONING_FAILURE  # Set the maximum number of retries for cloning
+    copy_validity = False
     for attempt in range(1, max_retries + 1):
         try:
             delete_folder_safely(TMP_FOLDER)
             err = subprocess.run(["git", "clone", "--depth=1", repo_cloning_url, TMP_FOLDER], check=True).stderr
 
             # save a copy if worse comes to worse
-
             string_cmd = "cp -rf " + ". " + BACKUP_FOLDER
 
-            print("save a copy if worse comes to worse = ", string_cmd)
+            print("save a copy if worse comes to worse : ", string_cmd)
 
             # todo rethink add thread
             try:
                 os.system(string_cmd)
+                print("saved a backup copy in : ", BACKUP_FOLDER)
+
             except:
                 print("error in saving a backup copy of previous version")
                 sleep(3)
@@ -159,13 +198,22 @@ def update_script(latest_version):
                 # Replace existing files with updated versions
                 copy_files(TMP_FOLDER)
 
-                # Update version file with latest version
-                with open(END_COPY_VERSION_FILE_NAME, "w") as f:
-                    f.write(latest_version)
+                check_res = check_all_files_are_valid(FILE_NAMES_TO_CHECK)
+                if check_res == True:  # files from internet are OK
+                    print("files updated correctly from the internet")
+                    copy_validity = True
+                else:
+                    print("problem updating from internet - retry load at try ", attempt, " from ", max_retries + 1)
+                    continue
 
-                # Update last update time after successful execution
-                with open(LAST_UPDATE_FILE, "w") as f:
-                    f.write(str(datetime.now()))
+                if copy_validity == True:
+                    # Update version file with latest version
+                    with open(END_COPY_VERSION_FILE_NAME, "w") as f:
+                        f.write(latest_version)
+
+                    # Update last update time after successful execution
+                    with open(LAST_UPDATE_FILE, "w") as f:
+                        f.write(str(datetime.now()))
 
                 print("Successfully updated project from GitHub!")
                 delete_folder_safely(TMP_FOLDER)
