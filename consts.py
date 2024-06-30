@@ -1,5 +1,5 @@
 #file_start_sanity_check
-#import cv2
+import cv2
 
 C_font = cv2.FONT_HERSHEY_SIMPLEX
 C_bottomLeftCornerOfText = (20, 460)
