@@ -31,7 +31,7 @@ print_timing = 0
 
 do_internetSpeedCheck = 0
 
-do_restart_PC_Once = 0
+#do_restart_PC_Once = 0
 
 # if do_internetSpeedCheck:
 #    down, up = check_speed()
@@ -291,7 +291,7 @@ def main():
         # restart the PC every night at 03:07
         if 2 < int(time_split[0]) < 4 and 6 < int(time_split[1]) < 12:
             print("Do Restart")
-            ### restart() #################################################### TEMPORARY removed for debugging android
+            restart()
 
         send_to_Firebase = False
 
