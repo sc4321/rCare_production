@@ -1,5 +1,7 @@
 #file_start_sanity_check
 import time
+from datetime import datetime
+
 import requests
 import subprocess  # For secure updates using Git
 from datetime import datetime, timedelta  # For scheduling daily checks
@@ -7,6 +9,46 @@ import os
 import shutil
 import stat  # Import the stat module
 import platform
+from send_data_to_app_via_firebase import generate_uuid_from_string
+from send_data_to_app_via_firebase import FirebaseDB
+
+config = {
+    "apiKey": "AIzaSyCpWjvONF2eLfIxsFOKSJaM8oU4HvLiW-M",
+    "authDomain": "480830608258-hsnsgpgooeov6v0cqdhcn5ba9ccqdg3g.apps.googleusercontent.com",
+    "databaseURL": "https://remotecare-ce82a-default-rtdb.firebaseio.com",
+    "storageBucket": "remotecare-ce82a.appspot.com",
+    "serviceAccount": r"firebase-adminsdk-serviceAccount.json"
+}
+
+firebase_db_Inst = FirebaseDB(config)
+
+'''
+    def FB_Log(LogDate, LogString,uid_string_place_name):
+        self.db = self.pyrebase.database()
+        self.db.child('rooms').child(uid_string_place_name).child('Log')
+        data = LogDate + ":" + LogString
+        self.db.update(data)
+'''
+
+def get_place_name():
+    # read config file
+    file1 = open('config.txt', 'r')
+    Lines = file1.readlines()
+    for line in Lines:
+        line_split = line.strip().split(" ")
+        if line_split[0] == "place_name":
+            print("line =", line)
+            place_name = line_split[-1]
+            break
+    return place_name
+
+place_name = get_place_name()
+uid_string_place_name = generate_uuid_from_string(place_name)
+
+def Log(LogDate, LogString):
+    firebase_db_Inst.FB_Log(LogDate, LogString, uid_string_place_name)
+
+
 
 # GitHub repository URL
 repo_url = "https://api.github.com/repos/sc4321/rCare_production"
@@ -187,6 +229,9 @@ def update_script(latest_version):
 
             except:
                 print("error in saving a backup copy of previous version")
+                k = datetime.now()
+                date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                Log(date_time_str, "error in saving a backup copy of previous version")
                 sleep(3)
                 exit(-1)
 
@@ -203,7 +248,12 @@ def update_script(latest_version):
                     print("files updated correctly from the internet")
                     copy_validity = True
                 else:
-                    print("problem updating from internet - retry load at try ", attempt, " from ", max_retries + 1)
+                    log_str = "problem updating from internet - retry load at try " + str(attempt)+" from " + str( max_retries + 1)
+                    print(log_str)
+                    k = datetime.now()
+                    date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                    Log(date_time_str, log_str)
+
                     continue
 
                 if copy_validity == True:
@@ -220,13 +270,23 @@ def update_script(latest_version):
                 break  # Exit loop on successful cloning
 
             else:
-                print("Error occoured in updating last version")
+                log_str = "Error occurred in updating last version"
+                print(log_str)
+                k = datetime.now()
+                date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                Log(date_time_str, log_str)
+
 
         except subprocess.CalledProcessError as e:
             print(f"Attempt {attempt}/{max_retries}: Error cloning repository: {e}")
             time.sleep(2 ** attempt)  # Exponential backoff between retries
     else:
-        print("Failed to clone the updated project after retries.")
+        log_str = "Failed to clone the updated project after retries."
+        print(log_str)
+        k = datetime.now()
+        date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+        Log(date_time_str, log_str)
+
         copy_files(BACKUP_FOLDER)
 
 
@@ -240,8 +300,19 @@ def delete_folder_safely(folder_path):
             change_permissions_recursive(folder_path, stat.S_IWRITE)  # Change permissions to writable for Unix
         shutil.rmtree(folder_path, ignore_errors=False)
     except PermissionError as e:
-        print(f"error encountered: {e}")
-    print(f"Successfully deleted folder: {folder_path}")
+        log_str = f"error encountered: {e}"
+        #print(f"error encountered: {e}")
+        print(log_str)
+        k = datetime.now()
+        date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+        Log(date_time_str, log_str)
+
+    #print(f"Successfully deleted folder: {folder_path}")
+    log_str = (f"Successfully deleted folder: {folder_path}")
+    print(log_str)
+    k = datetime.now()
+    date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+    Log(date_time_str, log_str)
 
 
 def change_permissions_recursive(path, mode):

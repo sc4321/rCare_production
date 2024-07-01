@@ -149,6 +149,11 @@ class FirebaseDB:
         self.InitializeOnce_updated = False
 
 
+    def FB_Log(LogDate, LogString,uid_string_place_name):
+        self.db = self.pyrebase.database()
+        self.db.child('rooms').child(uid_string_place_name).child('Log')
+        data = LogDate + ":" + LogString
+        self.db.update(data)
 
 
     def dataBase_init(self, Queue_len ,place_name,camera_name_list):
@@ -162,6 +167,7 @@ class FirebaseDB:
         data = {
             "place_name": place_name
         }
+
 
         self.db = self.pyrebase.database()
         self.db.child('rooms').child(uid_string_place_name)
