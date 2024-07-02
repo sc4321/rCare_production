@@ -1,4 +1,4 @@
-#file_start_sanity_check
+# file_start_sanity_check
 # in case of problem importing from google.cloud
 # try :  pip install --upgrade google-cloud-storage
 
@@ -67,13 +67,13 @@ import uuid
 
 import consts
 
-
-#from firebase_listener import FirebaseDBListener
+# from firebase_listener import FirebaseDBListener
 
 import queue
 import time
 
 debug_images = 1
+
 
 def generate_uuid_from_string(input_string):
     # Hash the input string using SHA-256
@@ -83,8 +83,6 @@ def generate_uuid_from_string(input_string):
     derived_uuid = uuid.uuid5(uuid.NAMESPACE_DNS, hashed_string)
 
     return str(derived_uuid)
-
-
 
 
 # Initialize Firebase with your credentials
@@ -116,6 +114,7 @@ except Exception as e:
     print(f"Error setting up stream1: {e}")
 """
 
+
 class FirebaseDB:
     def __init__(self, config):
         self.config = config
@@ -141,44 +140,40 @@ class FirebaseDB:
         self.db = self.firebase.database()
         self.storage = self.firebase.storage()
         self.firebase_auth = self.firebase.auth()
-        
+
         self.send_images_anyway = False
-        self.num_watchers = 1 # was 0
+        self.num_watchers = 1  # was 0
         self.first_time = True
 
         self.InitializeOnce_updated = False
 
-
-    def FB_Log(self, LogDate, LogString,uid_string_place_name):
+    def FB_Log(self, LogDate, LogString, uid_string_place_name):
         self.db = self.pyrebase.database()
         self.db.child('rooms').child(uid_string_place_name).child('Log')
         data = LogDate + ":" + LogString
         self.db.update(data)
 
-
-    def dataBase_init(self, Queue_len ,place_name,camera_name_list):
+    def dataBase_init(self, Queue_len, place_name, camera_name_list):
         place_name = place_name.strip()
         uid_string_place_name = generate_uuid_from_string(place_name)
-        #concatanate_all_camera_names:
+        # concatanate_all_camera_names:
         res = ""
-        for i in range (len (camera_name_list)):
+        for i in range(len(camera_name_list)):
             res = res + camera_name_list[i] + "   "
 
         data = {
             "place_name": place_name
         }
 
-
         self.db = self.pyrebase.database()
         self.db.child('rooms').child(uid_string_place_name)
         self.db.update(data)
 
-
-        #set general config for a room installation
+        # set general config for a room installation
 
         data = {
             "Queue_len": str(Queue_len),
-            "camera_name_list": res   #.strip()  todo is strip needed ?
+            "camera_name_list": res  # .strip()  todo is strip needed ?
         }
         self.db = self.pyrebase.database()
         self.db.child('config')
@@ -187,39 +182,19 @@ class FirebaseDB:
         print("Firebase init Done")
         return (uid_string_place_name)
 
-    def user_login(self, uid_string_place_name, mail='hartk111@gmail.com', password="234g2w45jh"):
+    def user_login(self, uid_string_place_name, mail='hartk111@gmail.com',
+                   password="234g2w45jh"):  # TODO :  hide personal data in personal config
 
         if self.firebase is not None:
             # user = auth.sign_in_with_email_and_password(mail, password)
             # TODO: Import a list of all users and relevant cameras for security rules authentication
 
             try:
-                """
-                user = auth.create_user(
-                    # email=self.mail,
-                    email="binyaminc6@gmail.com",
-                    email_verified=False,
-                    password="123456",
-                    display_name="Is",
-                    disabled=False
-                )
-                """
                 user = auth.get_user_by_email(mail)
 
-                #uid_user_mail = generate_uuid_from_string(mail)
+                # uid_user_mail = generate_uuid_from_string(mail)
                 uid_user_mail = user.uid
-                """
-                self.idToken =user.tokens.get("id_token")
-                # self.idToken = user['idToken']
-                # self.idToken = user.uid
-
-                user_pyre = self.auth.sign_in_with_email_and_password(email="binyaminc6@gmail.com", password="123456")
-                # self.idToken = self.auth.create_custom_token(user.uid)
-                self.idToken = user_pyre['idToken']
-                print(self.idToken)
-                uid = user.uid
-                """
-                #add new user to same only one camera in project
+                # add new user to same only one camera in project
                 data = {
                     uid_string_place_name: True
                 }
@@ -235,8 +210,7 @@ class FirebaseDB:
             print("firebase not initialized correctly, so login failed")
             return None
 
-        #return uid
-
+        # return uid
 
     def _refresh_token_thread(self):
         while True:
@@ -254,8 +228,10 @@ class FirebaseDB:
             '''
             time.sleep(55 * 60)  # Refresh the token every 40 minutes
 
-    def firebase_admin_upload_np_image_to_storage(self, person_count, opencv_image, filename, datetime,uid_string_place_name, camera_name, rect_data, speed,
-                                                  camera_block, camera_block_percentage_top, camera_block_percentage_bottom, width, hight):
+    def firebase_admin_upload_np_image_to_storage(self, person_count, opencv_image, filename, datetime,
+                                                  uid_string_place_name, camera_name, rect_data, speed,
+                                                  camera_block, camera_block_percentage_top,
+                                                  camera_block_percentage_bottom, width, hight):
 
         '''cv2.putText(opencv_image, datetime,
                     consts.C_bottomLeftCornerOfText_small,
@@ -283,30 +259,32 @@ class FirebaseDB:
                 'InternetSpeed': speed
             })
 
-            if camera_block.strip()=='bottom':
+            if camera_block.strip() == 'bottom':
                 block_percentage_bottom = int(camera_block_percentage_bottom.strip())
                 if block_percentage_bottom > 0:
-                    #0_371_790_378_ 790_541_1_537_0_371
-                    btm_up = int(hight*(1-block_percentage_bottom/100))
-                    filter_string = '0_'+str(btm_up)+'_'+str(width)+'_'+str(btm_up)+'_'+str(width)+'_'+str(hight)+'_'+'0_'+str(hight)+'_'+'0_'+str(btm_up)
-                    print('filter_string = ',filter_string)
+                    # 0_371_790_378_ 790_541_1_537_0_371
+                    btm_up = int(hight * (1 - block_percentage_bottom / 100))
+                    filter_string = '0_' + str(btm_up) + '_' + str(width) + '_' + str(btm_up) + '_' + str(
+                        width) + '_' + str(hight) + '_' + '0_' + str(hight) + '_' + '0_' + str(btm_up)
+                    print('filter_string = ', filter_string)
 
                     self.db = self.pyrebase.database()
-                    self.db.child('rooms').child(uid_string_place_name).child(camera_name+"_mask")
+                    self.db.child('rooms').child(uid_string_place_name).child(camera_name + "_mask")
                     self.db.update({
                         '0': filter_string
                     })
 
-            if camera_block.strip()=='ceiling':
+            if camera_block.strip() == 'ceiling':
                 block_percentage_bottom = int(camera_block_percentage_top.strip())
                 if block_percentage_bottom > 0:
-                    #0_0_800_0_800_200_0_200_0_0
-                    ceil_dn = int(hight*(block_percentage_bottom/100))
-                    filter_string = '0_0_'+str(width)+'_0_'+str(width)+'_'+str(ceil_dn)+'_'+'0_'+str(ceil_dn)+'_'+'0_0'
-                    print('filter_string = ',filter_string)
+                    # 0_0_800_0_800_200_0_200_0_0
+                    ceil_dn = int(hight * (block_percentage_bottom / 100))
+                    filter_string = '0_0_' + str(width) + '_0_' + str(width) + '_' + str(ceil_dn) + '_' + '0_' + str(
+                        ceil_dn) + '_' + '0_0'
+                    print('filter_string = ', filter_string)
 
                     self.db = self.pyrebase.database()
-                    self.db.child('rooms').child(uid_string_place_name).child(camera_name+"_mask")
+                    self.db.child('rooms').child(uid_string_place_name).child(camera_name + "_mask")
                     self.db.update({
                         '1': filter_string
                     })
@@ -342,7 +320,6 @@ class FirebaseDB:
 
             self.InitializeOnce_updated = True
 
-
         if speed == "High":
 
             # Convert OpenCV image to bytes
@@ -355,7 +332,7 @@ class FirebaseDB:
             firebase_admin_bucket = storage.bucket()
 
             # Create a blob (file) in the bucket
-            storage_bucket = f'images/'+uid_string_place_name+'/'+camera_name+'/'+filename
+            storage_bucket = f'images/' + uid_string_place_name + '/' + camera_name + '/' + filename
             blob = firebase_admin_bucket.blob(storage_bucket)
 
             # Upload the image data to the blob
@@ -371,24 +348,24 @@ class FirebaseDB:
             if debug_images == 1:
                 download_url_split = download_url.split("/")
             try:
-                if debug_images==1:
-                    rect_data = rect_data + '_'+ download_url_split[-1]
+                if debug_images == 1:
+                    rect_data = rect_data + '_' + download_url_split[-1]
                     rect_data = rect_data.split('.')[0]
 
                 self.db.update({
                     'image_data': download_url,
                     'timestamp': datetime,
                     'rect_data': rect_data
-                    })
+                })
             except Exception as e:
                 print(f"Error in db.update: {e}")
-        elif speed=="Low":
-            #upload just rect corners. And an image every 2 hours without persons
+        elif speed == "Low":
+            # upload just rect corners. And an image every 2 hours without persons
 
             self.db = self.pyrebase.database()
-            self.db.child('rooms').child(uid_string_place_name).child(camera_name+'_empty_Img')
+            self.db.child('rooms').child(uid_string_place_name).child(camera_name + '_empty_Img')
             self.db.update({
-                camera_name + '_empty_Img' : ""
+                camera_name + '_empty_Img': ""
             })
 
             self.db = self.pyrebase.database()
@@ -442,4 +419,4 @@ if __name__ == "__main__":
 
     # Get data from database
     # result = firebase_db.get_data("example/path")
-#file_end_sanity_check
+# file_end_sanity_check

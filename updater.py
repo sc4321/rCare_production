@@ -20,7 +20,26 @@ config = {
     "serviceAccount": r"firebase-adminsdk-serviceAccount.json"
 }
 
-firebase_db_Inst = FirebaseDB(config)
+# firebase_db_Inst = FirebaseDB(config)
+
+# Initialize Firebase
+cred = credentials.Certificate(config["serviceAccount"])
+firebase_admin.initialize_app(cred)
+
+succeded = False
+while not succeded:
+    try:
+        # Initialize FirebaseDB instance
+        firebase_db_Inst = FirebaseDB(config)
+        uid_string_place_name = firebase_db_Inst.dataBase_init(firebase_queue_len, place_name, camera_name_list)
+        firebase_db_Inst.user_login(uid_string_place_name, "shlomocohen3@gmail.com", "123456")
+        #firebase_db_Inst.user_login(uid_string_place_name, "google_tester@gmail.com", "123456")
+        succeded = True
+    except Exception as e:
+        print(f"Error in Initialize FirebaseDB instance: {e}")
+
+
+
 
 '''
     def FB_Log(LogDate, LogString,uid_string_place_name):
@@ -40,6 +59,7 @@ def get_place_name():
             print("line =", line)
             place_name = line_split[-1]
             break
+    file1.close()
     return place_name
 
 place_name = get_place_name()
