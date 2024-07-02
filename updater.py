@@ -23,8 +23,14 @@ config = {
 # firebase_db_Inst = FirebaseDB(config)
 
 # Initialize Firebase
-cred = credentials.Certificate(config["serviceAccount"])
-firebase_admin.initialize_app(cred)
+#cred = credentials.Certificate(config["serviceAccount"])
+#firebase_admin.initialize_app(cred)
+
+firebase_queue_len = 50  # default TODO : move to consts.py
+place_name = "location"
+camera_name_list = []
+camera_block_list = []
+camera_block_percentage = []
 
 succeded = False
 while not succeded:
