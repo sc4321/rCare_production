@@ -37,7 +37,7 @@ do_internetSpeedCheck = 0
 #    down, up = check_speed()
 
 if print_timing:
-    if print_timing:    start = time.process_time()
+    start = time.process_time()
 
 # Load the YOLOv8 model
 model = YOLO("yolov8l.pt")
@@ -245,16 +245,6 @@ def main():
     send_to_Firebase = False
 
     # Add time stamp on images
-    '''
-    C_font = cv2.FONT_HERSHEY_SIMPLEX
-    C_bottomLeftCornerOfText = (20, 460)
-    C_fontScale = 1.3
-    C_fontColor = (255, 255, 255)
-    C_fontColor_black = (0, 0, 0)
-    C_thickness_8 = 8
-    C_thickness_4 = 4
-    C_lineType = 2
-    '''
 
     Last_time_No_Person_in_image = []
 

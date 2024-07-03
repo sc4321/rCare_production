@@ -39,21 +39,11 @@ while not succeded:
         firebase_db_Inst = FirebaseDB(config)
         uid_string_place_name = firebase_db_Inst.dataBase_init(firebase_queue_len, place_name, camera_name_list)
         firebase_db_Inst.user_login(uid_string_place_name, "shlomocohen3@gmail.com", "123456")
-        #firebase_db_Inst.user_login(uid_string_place_name, "google_tester@gmail.com", "123456")
         succeded = True
     except Exception as e:
         print(f"Error in Initialize FirebaseDB instance: {e}")
 
-
-
-
-'''
-    def FB_Log(LogDate, LogString,uid_string_place_name):
-        self.db = self.pyrebase.database()
-        self.db.child('rooms').child(uid_string_place_name).child('Log')
-        data = LogDate + ":" + LogString
-        self.db.update(data)
-'''
+    time.sleep(120)
 
 def get_place_name():
     # read config file
@@ -221,6 +211,7 @@ def check_for_update():
 
     else:
         print("Failed to retrieve update information after retries.")
+
         sys.exit(-3)
 
 
