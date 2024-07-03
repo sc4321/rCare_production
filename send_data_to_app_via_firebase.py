@@ -150,8 +150,14 @@ class FirebaseDB:
     def FB_Log(self, LogDate, LogString, uid_string_place_name):
         self.db = self.pyrebase.database()
         self.db.child('rooms').child(uid_string_place_name).child('Log')
-        data = LogDate + ":" + LogString
+        data = { LogDate : LogString }
         self.db.update(data)
+
+
+
+
+
+
 
     def dataBase_init(self, Queue_len, place_name, camera_name_list):
         place_name = place_name.strip()
