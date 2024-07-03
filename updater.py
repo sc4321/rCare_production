@@ -247,7 +247,13 @@ def update_script(latest_version):
             # todo rethink add thread
             try:
                 os.system(string_cmd)
-                print("saved a backup copy in : ", BACKUP_FOLDER)
+                log_str = "saved a backup copy in : "+ BACKUP_FOLDER
+                print(log_str)
+                k = datetime.now()
+                date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                Log(date_time_str, log_str)
+                sleep(3)
+
 
             except:
                 print("error in saving a backup copy of previous version")
@@ -268,6 +274,13 @@ def update_script(latest_version):
                 check_res = check_all_files_are_valid(FILE_NAMES_TO_CHECK)
                 if check_res == True:  # files from internet are OK
                     print("files updated correctly from the internet")
+                    log_str = "files updated correctly from the internet "
+                    print(log_str)
+                    k = datetime.now()
+                    date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                    Log(date_time_str, log_str)
+                    sleep(3)
+
                     copy_validity = True
                 else:
                     log_str = "problem updating from internet - retry load at try " + str(attempt)+" from " + str( max_retries + 1)
@@ -288,6 +301,12 @@ def update_script(latest_version):
                         f.write(str(datetime.now()))
 
                 print("Successfully updated project from GitHub!")
+                log_str = "Successfully updated project from GitHub! "
+                print(log_str)
+                k = datetime.now()
+                date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                Log(date_time_str, log_str)
+
                 delete_folder_safely(TMP_FOLDER)
                 break  # Exit loop on successful cloning
 
