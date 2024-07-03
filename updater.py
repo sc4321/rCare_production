@@ -48,7 +48,7 @@ while not succeded:
     except Exception as e:
         print(f"Error in Initialize FirebaseDB instance: {e}")
 
-    time.sleep(10)
+    #time.sleep(10)
 
 def get_place_name():
     # read config file
@@ -241,7 +241,7 @@ def update_script(latest_version):
 
             # save a copy if worse comes to worse
             string_cmd = "cp -rf " + ". " + BACKUP_FOLDER
-
+            
             print("save a copy if worse comes to worse : ", string_cmd)
 
             # todo rethink add thread
@@ -252,7 +252,7 @@ def update_script(latest_version):
                 k = datetime.now()
                 date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, log_str)
-                sleep(3)
+                #sleep(3)
 
 
             except:
@@ -260,7 +260,6 @@ def update_script(latest_version):
                 k = datetime.now()
                 date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, "error in saving a backup copy of previous version")
-                sleep(3)
                 exit(-1)
 
             # Update version file with latest version
@@ -279,7 +278,7 @@ def update_script(latest_version):
                     k = datetime.now()
                     date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                     Log(date_time_str, log_str)
-                    sleep(3)
+                    #sleep(3)
 
                     copy_validity = True
                 else:
