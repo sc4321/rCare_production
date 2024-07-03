@@ -48,7 +48,7 @@ while not succeded:
     except Exception as e:
         print(f"Error in Initialize FirebaseDB instance: {e}")
 
-    time.sleep(120)
+    time.sleep(10)
 
 def get_place_name():
     # read config file
