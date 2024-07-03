@@ -250,7 +250,7 @@ def update_script(latest_version):
                 log_str = "saved a backup copy in : "+ BACKUP_FOLDER
                 print(log_str)
                 k = datetime.now()
-                date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, log_str)
                 sleep(3)
 
@@ -258,7 +258,7 @@ def update_script(latest_version):
             except:
                 print("error in saving a backup copy of previous version")
                 k = datetime.now()
-                date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, "error in saving a backup copy of previous version")
                 sleep(3)
                 exit(-1)
@@ -277,7 +277,7 @@ def update_script(latest_version):
                     log_str = "files updated correctly from the internet "
                     print(log_str)
                     k = datetime.now()
-                    date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                    date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                     Log(date_time_str, log_str)
                     sleep(3)
 
@@ -286,7 +286,7 @@ def update_script(latest_version):
                     log_str = "problem updating from internet - retry load at try " + str(attempt)+" from " + str( max_retries + 1)
                     print(log_str)
                     k = datetime.now()
-                    date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                    date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                     Log(date_time_str, log_str)
 
                     continue
@@ -304,7 +304,7 @@ def update_script(latest_version):
                 log_str = "Successfully updated project from GitHub! "
                 print(log_str)
                 k = datetime.now()
-                date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, log_str)
 
                 delete_folder_safely(TMP_FOLDER)
@@ -314,7 +314,7 @@ def update_script(latest_version):
                 log_str = "Error occurred in updating last version"
                 print(log_str)
                 k = datetime.now()
-                date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+                date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, log_str)
 
 
@@ -325,7 +325,7 @@ def update_script(latest_version):
         log_str = "Failed to clone the updated project after retries."
         print(log_str)
         k = datetime.now()
-        date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+        date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
         Log(date_time_str, log_str)
 
         copy_files(BACKUP_FOLDER)
@@ -345,14 +345,14 @@ def delete_folder_safely(folder_path):
         #print(f"error encountered: {e}")
         print(log_str)
         k = datetime.now()
-        date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+        date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
         Log(date_time_str, log_str)
 
     #print(f"Successfully deleted folder: {folder_path}")
     log_str = (f"Successfully deleted folder: {folder_path}")
     print(log_str)
     k = datetime.now()
-    date_time_str = k.strftime('%H:%M:%S  %d/%m/%Y')
+    date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
     Log(date_time_str, log_str)
 
 
