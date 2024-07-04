@@ -241,7 +241,7 @@ def update_script(latest_version):
 
             # save a copy if worse comes to worse
             string_cmd = "cp -rf " + ". " + BACKUP_FOLDER
-            
+
             print("save a copy if worse comes to worse : ", string_cmd)
 
             # todo rethink add thread
@@ -252,7 +252,7 @@ def update_script(latest_version):
                 k = datetime.now()
                 date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, log_str)
-                #sleep(3)
+                time.sleep(3)
 
 
             except:
@@ -278,7 +278,7 @@ def update_script(latest_version):
                     k = datetime.now()
                     date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                     Log(date_time_str, log_str)
-                    #sleep(3)
+                    time.sleep(3)
 
                     copy_validity = True
                 else:
@@ -287,6 +287,7 @@ def update_script(latest_version):
                     k = datetime.now()
                     date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                     Log(date_time_str, log_str)
+                    time.sleep(3)
 
                     continue
 
@@ -305,6 +306,7 @@ def update_script(latest_version):
                 k = datetime.now()
                 date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, log_str)
+                time.sleep(3)
 
                 delete_folder_safely(TMP_FOLDER)
                 break  # Exit loop on successful cloning
@@ -315,6 +317,7 @@ def update_script(latest_version):
                 k = datetime.now()
                 date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, log_str)
+                time.sleep(3)
 
 
         except subprocess.CalledProcessError as e:
@@ -326,6 +329,7 @@ def update_script(latest_version):
         k = datetime.now()
         date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
         Log(date_time_str, log_str)
+        time.sleep(3)
 
         copy_files(BACKUP_FOLDER)
 
@@ -346,6 +350,7 @@ def delete_folder_safely(folder_path):
         k = datetime.now()
         date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
         Log(date_time_str, log_str)
+        time.sleep(3)
 
     #print(f"Successfully deleted folder: {folder_path}")
     log_str = (f"Successfully deleted folder: {folder_path}")
@@ -353,6 +358,7 @@ def delete_folder_safely(folder_path):
     k = datetime.now()
     date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
     Log(date_time_str, log_str)
+    time.sleep(3)
 
 
 def change_permissions_recursive(path, mode):
