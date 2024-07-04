@@ -272,7 +272,6 @@ def update_script(latest_version):
 
                 check_res = check_all_files_are_valid(FILE_NAMES_TO_CHECK)
                 if check_res == True:  # files from internet are OK
-                    print("files updated correctly from the internet")
                     log_str = "files updated correctly from the internet "
                     print(log_str)
                     k = datetime.now()
@@ -302,7 +301,6 @@ def update_script(latest_version):
 
                 print("Successfully updated project from GitHub!")
                 log_str = "Successfully updated project from GitHub! "
-                print(log_str)
                 k = datetime.now()
                 date_time_str = k.strftime('%H:%M:%S___%d_%m_%Y')
                 Log(date_time_str, log_str)
