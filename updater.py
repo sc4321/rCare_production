@@ -88,8 +88,8 @@ UPDATE_INTERVAL = 1
 
 # Magic numbers:
 REQUEST_HAS_SUCCEEDED = 200
-RETRIES_FOR_INTERNET_FAILURE = 10
-RETRIES_FOR_CLONING_FAILURE = 10
+RETRIES_FOR_INTERNET_FAILURE = 3
+RETRIES_FOR_CLONING_FAILURE = 3
 
 FILE_NAMES_TO_CHECK = {"./updater.py", "./main.py","./config.txt","./run.bat","./VideoClipsRecord.py","./VideoClipsRecord.py","./consts.py"}
 
