@@ -236,7 +236,7 @@ def copy_files(source_path):
     shutil.copy2(os.path.join(source_path, "config.txt"), ".")
     shutil.copy2(os.path.join(source_path, "consts.py"), ".")
     # shutil.copy2(os.path.join(source_path, "yolov8l.pt"), ".")
-    #shutil.copy2(os.path.join(source_path, "updater.py"), ".") # todo
+    shutil.copy2(os.path.join(source_path, "updater.py"), ".") # todo
 
 
 def update_script(latest_version):
