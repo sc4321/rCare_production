@@ -618,4 +618,4 @@ def is_image_lit(image, grid_size, brightness_threshold):
 
 if __name__ == "__main__":
     main()
-#file_end_sanity_check_nonono
+#file_end_sanity_check
