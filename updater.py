@@ -91,13 +91,13 @@ REQUEST_HAS_SUCCEEDED = 200
 RETRIES_FOR_INTERNET_FAILURE = 10
 RETRIES_FOR_CLONING_FAILURE = 10
 
-FILE_NAMES_TO_CHECK = {"./updater.py", "./main.py","./config.txt","./run.bat","./VideoClipsRecord.py","./VideoClipsRecord.py","./consts.py"}
+FILE_NAMES_TO_CHECK = {"./updater.py", "./main.py", "./config.txt", "./run.bat", "./VideoClipsRecord.py", "./VideoClipsRecord.py", "./consts.py"}
 
-def check_all_files_are_valid(file_list):
+def check_all_files_are_valid(file_dir,file_list,):
 
     for file_name in file_list:
         try:
-            file = open(file_name, 'r')
+            file = open(file_dir + file_name, 'r')
             lines = file.readlines()
             ext = file_name.split(".")[-1]
 
@@ -275,11 +275,13 @@ def update_script(latest_version):
                 f.write(latest_version)
 
             if err is None:
-                # Replace existing files with updated versions
-                copy_files(TMP_FOLDER)
 
-                check_res = check_all_files_are_valid(FILE_NAMES_TO_CHECK)
+                check_res = check_all_files_are_valid(TMP_FOLDER,FILE_NAMES_TO_CHECK)
                 if check_res == True:  # files from internet are OK
+
+                    # Replace existing files with updated versions
+                    copy_files(TMP_FOLDER)
+
                     log_str = "files updated correctly from the internet "
                     print(log_str)
                     k = datetime.now()
