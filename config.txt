@@ -1,8 +1,8 @@
 #file_start_sanity_check
-show_on_screen 1
-video_dir C:\projects\check_clips_records\\
+show_on_screen 0
+video_dir D:\videos\\
 firebase_queue_len 200
-place_name My_Place
+place_name moshe_cohen_room
 total_cameras 2
 camera_block_bottom_ceiling_both both both
 camera_block_percentage 30 30 30 30
